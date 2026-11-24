@@ -134,6 +134,9 @@ class Config:
 
         self.draw_frames: bool = self.get("draw_frames", False)
 
+        # Check frame conventions (world-aligned frames, principal joint axes) after export
+        self.check_frames: bool = self.get("check_frames", False)
+
         self.assembly_name: str = self.get("assembly_name", required=False)
         self.output_format: str = self.get("output_format")
         self.configuration: str | dict = self.get("configuration", "default")

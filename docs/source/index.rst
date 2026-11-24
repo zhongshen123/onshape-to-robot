@@ -36,5 +36,6 @@ to descriptions format like **URDF**, **SDF** or **MuJoCo**, so that you can use
    exporter_sdf
    exporter_mujoco
    kinematic_loops
+   frame_check
    processors
    cache

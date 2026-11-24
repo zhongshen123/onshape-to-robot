@@ -93,14 +93,21 @@ def main():
             for processor in config.processors:
                 processor.process(robot)
 
-            exporter.write_xml(
-                robot,
+            output_file = (
                 config.output_directory
                 + "/"
                 + config.output_filename
                 + "."
-                + exporter.ext,
+                + exporter.ext
             )
+            exporter.write_xml(robot, output_file)
+
+            # Optional frame convention check (x forward, y left, z up)
+            if config.check_frames and config.output_format in ("urdf", "mujoco"):
+                from .frame_check import check_file, print_report
+
+                report = check_file(output_file)
+                print_report(report)
 
             if not args.safe:
                 # Executing post-import commands
