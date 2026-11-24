@@ -294,7 +294,12 @@ class ExporterMuJoCo(Exporter):
             return
 
         joint_xml: str = "<joint "
-        joint_xml += 'axis="%g %g %g" ' % self.config.round(tuple(joint.axis))
+        # Axis override: joint_properties "xyz" (in the joint frame).
+        # list -> custom axis, missing -> Onshape axis, false -> 0 0 1
+        joint_axis = joint.properties.get("xyz", joint.axis)
+        if joint_axis is None or joint_axis is False:
+            joint_axis = (0, 0, 1)
+        joint_xml += 'axis="%g %g %g" ' % self.config.round(tuple(joint_axis))
         joint_xml += f'name="{joint.name}" '
         if joint.joint_type == Joint.REVOLUTE:
             joint_xml += 'type="hinge" '

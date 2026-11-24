@@ -215,7 +215,12 @@ class ExporterURDF(Exporter):
 
         self.append(f'<parent link="{joint.parent.name}" />')
         self.append(f'<child link="{joint.child.name}" />')
-        self.append('<axis xyz="%g %g %g"/>' % self.config.round(tuple(joint.axis)))
+        # Axis override: joint_properties "xyz" (in the joint frame).
+        # list -> custom axis, missing -> Onshape axis, false -> 0 0 1
+        joint_axis = joint.properties.get("xyz", joint.axis)
+        if joint_axis is None or joint_axis is False:
+            joint_axis = (0, 0, 1)
+        self.append('<axis xyz="%g %g %g"/>' % self.config.round(tuple(joint_axis)))
 
         limits = ""
         if "max_effort" in joint.properties:
